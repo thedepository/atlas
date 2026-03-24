@@ -1,7 +1,7 @@
 # FT Atlas
 **A network visualisation of legislative proposals in the Danish Parliament (Folketinget), 2005–2025.**
 
-FT Atlas is an interactive force-directed graph, revealing patterns of cross-party collaboration, political clustering, and legislative activity over two decades of Danish parliamentary history based on more than 20,000 legislative documents submitted to the Danish Folketing between 2005 and 2025.
+FT Atlas is an interactive force-directed graph, revealing patterns of cross-party collaboration, political clustering, and legislative activity over two decades of Danish parliamentary history based on 15,000+ documents submitted to the Danish Folketing between 2005 and 2025.
 
 <img width="1301" height="697" alt="sample" src="https://github.com/user-attachments/assets/eff8a907-2e3f-4e04-9112-0f19d6bf7353" />
 
