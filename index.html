@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="src/stylesheet.css">
+    <link rel="icon" href="src/icon.ico">
+    <title>FT Atlas</title>
+  </head>
+  <body>
+   
+    <div id="layout">
+      <div id="header">
+        <div class="title-block">
+          <h1>FT Atlas</h1>
+          <p>Find over 20.000+ lovforslag fremsat mellem 2005 og 2025</p>
+        </div>
+      </div>
+ 
+      <div id="vizWrap">
+        <svg id="viz" aria-label="Visualization"></svg>
+      </div>
+
+      <aside id="sidePanel">
+        <div id="panelHeader">
+          <button id="panelCloseBtn" type="button" aria-label="Close panel">X</button>
+          <p id="selectedTitle"></p>
+          <div id="selectedSub"></div>
+        </div>
+        <div id="panelSearchRow">
+          <input id="panelSearch" type="text" placeholder="Søg efter lovforslag..." disabled />
+        </div>
+        <div id="panelBody">
+          <div class="panelHint">
+          </div>
+        </div>
+      </aside>
+
+      <div id="legend">
+        <div class="legend-axis">
+          <span>Venstre</span>
+          <div class="bar"></div>
+          <span>Højre</span>
+        </div>
+        <div style="margin-top:8px" class="legend-label">Størrelse = antal forslag</div>
+      </div>
+
+      <div id="partyFilterBar" aria-label="Filter">
+        <div class="label">Filter</div>
+        <button class="partyBtn" id="partyReset" type="button" style="margin-left: 6px;">
+         RESET
+        </button>
+      </div>
+
+      <div id="tooltip">
+        <div class="tName"></div>
+        <div class="tMeta"></div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+    <script src="src/data.js"></script>
+    <script src="src/model.js"></script>
+    
+  </body>
+</html>
+
