@@ -1,5 +1,5 @@
 # FT Atlas
-**A network visualisation of legislative proposals in the Danish Parliament (Folketing), 2005–2025.**
+**A network visualisation of legislative proposals in the Danish Parliament (Folketinget), 2005–2025.**
 
 FT Atlas is an interactive force-directed graph, revealing patterns of cross-party collaboration, political clustering, and legislative activity over two decades of Danish parliamentary history based on more than 20,000 legislative proposal document submitted to the Danish Folketing between 2005 and 2025.
 
@@ -38,16 +38,9 @@ Each node in the atlast represents a politician with edges connecting politician
 | NB | Nye Borgerlige |
 
  
-## Dependencies
- 
-- [D3.js v7](https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js) — loaded via CDN
-- [Space Grotesk & Space Mono](https://fonts.google.com/) — loaded via Google Fonts
- 
-No other dependencies or build tools are required.
-
- 
 ## Licence
  
-Data sourced from the Danish Parliament's open data at [ft.dk](https://www.ft.dk). Please refer to Folketing's terms of use for data reuse conditions.
+Data sourced from the Danish Parliament's open data at [ft.dk](https://www.ft.dk). 
+Please refer to relevant terms of use for data reuse conditions.
  
-Code released under the MIT Licence. See `LICENSE` for details.
+Code released under the GPL-3.0 Licence. See `LICENSE` for details.
