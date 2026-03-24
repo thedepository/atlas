@@ -43,7 +43,7 @@
   .title-block p {
     font-size: 0.72rem;
     color: var(--muted);
-    margin-top: 4px;
+    line-height: 0.5;
   }
 
   #legend {
@@ -230,6 +230,7 @@
     font-size: 10px;
     line-height: 1.5;
     margin-top: 8px;
+    margin-bottom: 8px;
   }
 
   .propItem {
@@ -248,7 +249,28 @@
     word-break: break-word;
   }
 
-  .propTitle a {
+.propTitleBtn {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  font-weight: inherit;
+  color: var(--text);
+  text-align: left;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+.propTitleBtn:hover {
+  color: var(--headline);
+}
+
+.propTitleBtn.active {
+  color: var(--headline);
+}
+
+.propTitle a {
     color: var(--text);
     text-decoration: none;
   }
@@ -277,6 +299,17 @@
     font-size: 10px;
     line-height: 1.4;
   }
+
+.propLink {
+  color: var(--text);
+  text-decoration: none;
+  font-size: 10px;
+}
+
+.propLink:hover {
+  color: var(--headline);
+  text-decoration: underline;
+}
 
   #partyFilterBar {
     position: absolute;
