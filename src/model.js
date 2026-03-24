@@ -41,9 +41,11 @@
       let activeParty = null;
       let selectedNode = null;
       let selectedPropositions = [];
+      let activeProposalId = null;
 
       function updateSidePanel() {
         if (!selectedNode) {
+          activeProposalId = null;
           layoutEl.classList.remove("panel-open");
           sidePanel.title.textContent = "Select a node";
           sidePanel.sub.textContent = "Click a politician to see their signed propositions.";
@@ -67,6 +69,7 @@
         if (!selectedNode) return;
         selectedNode = null;
         selectedPropositions = [];
+        activeProposalId = null;
         updateSidePanel();
         
         if (nodeSel && linkSel) updatePartyIsolation();
@@ -92,6 +95,11 @@
           : selectedPropositions;
 
         const frag = document.createDocumentFragment();
+        const clickHint = document.createElement("div");
+        clickHint.className = "panelHint";
+        clickHint.textContent = "Klik på et lovforslag for at se hvilke folketingsmedlemmer, der står bag.";
+        frag.appendChild(clickHint);
+
         if (list.length === 0) {
           const el = document.createElement("div");
           el.className = "panelHint";
@@ -104,12 +112,17 @@
 
             const title = document.createElement("div");
             title.className = "propTitle";
-            const a = document.createElement("a");
-            a.href = p.url;
-            a.target = "_blank";
-            a.rel = "noopener noreferrer";
-            a.textContent = p.title || "Untitled proposition";
-            title.appendChild(a);
+            const titleBtn = document.createElement("button");
+            titleBtn.type = "button";
+            titleBtn.className = "propTitleBtn";
+            if (activeProposalId === p._id) titleBtn.classList.add("active");
+            titleBtn.textContent = p.title || "Untitled proposition";
+            titleBtn.addEventListener("click", () => {
+              activeProposalId = activeProposalId === p._id ? null : p._id;
+              updatePartyIsolation();
+              renderPropositionsList(sidePanel.search.value || "");
+            });
+            title.appendChild(titleBtn);
 
             const meta = document.createElement("div");
             meta.className = "propMeta";
@@ -122,6 +135,15 @@
               tag.className = "propTag";
               tag.textContent = tagText;
               meta.appendChild(tag);
+            }
+            if (p.url) {
+              const link = document.createElement("a");
+              link.className = "propLink";
+              link.href = p.url;
+              link.target = "_blank";
+              link.rel = "noopener noreferrer";
+              link.textContent = "ft.dk";
+              meta.appendChild(link);
             }
 
             item.appendChild(title);
@@ -221,19 +243,40 @@
       }
 
       function updatePartyIsolation() {
-        const isActive = activeParty !== null && activeParty !== undefined;
+        const isPartyActive = activeParty !== null && activeParty !== undefined;
+        const isProposalActive = Number.isInteger(activeProposalId);
+        const proposalNodeIds = isProposalActive
+          ? new Set(nodes.filter((n) => Array.isArray(n.propIds) && n.propIds.includes(activeProposalId)).map((n) => n.id))
+          : null;
+
+        const nodeIdFromLinkEnd = (end) => (typeof end === "object" && end !== null ? end.id : end);
 
         linkSel.attr("opacity", (d) => {
-          if (!isActive) return 1;
-          return d.sourceParty === activeParty || d.targetParty === activeParty ? 0.25 : 0.03;
+          let opacity = 1;
+          if (isPartyActive) {
+            opacity = d.sourceParty === activeParty || d.targetParty === activeParty ? 0.25 : 0.03;
+          }
+          if (isProposalActive) {
+            const sourceId = nodeIdFromLinkEnd(d.source);
+            const targetId = nodeIdFromLinkEnd(d.target);
+            const keep = proposalNodeIds.has(sourceId) && proposalNodeIds.has(targetId);
+            opacity = keep ? Math.max(opacity, 0.28) : Math.min(opacity, 0.02);
+          }
+          return opacity;
         });
 
         nodeSel.attr("opacity", (d) => {
-          if (!isActive) return 1;
-          return d.party === activeParty ? 1 : 0.07;
+          let opacity = 1;
+          if (isPartyActive) {
+            opacity = d.party === activeParty ? 1 : 0.07;
+          }
+          if (isProposalActive && !proposalNodeIds.has(d.id)) {
+            opacity = Math.min(opacity, 0.04);
+          }
+          return opacity;
         });
 
-        if (selectedNode && isActive && selectedNode.party !== activeParty) {
+        if (selectedNode && isPartyActive && selectedNode.party !== activeParty) {
           nodeSel.classed("selected", (d) => d.id === selectedNode.id && d.party === activeParty);
         } else {
           nodeSel.classed("selected", (d) => selectedNode && d.id === selectedNode.id);
@@ -373,8 +416,13 @@
           .on("click", function (event, d) {
             selectedNode = d;
             selectedPropositions = d.propIds
-              .map((pid) => propById[pid])
+              .map((pid) => {
+                const p = propById[pid];
+                if (!p) return null;
+                return { ...p, _id: pid };
+              })
               .filter(Boolean);
+            activeProposalId = null;
 
             updateSidePanel();
             nodeSel.classed("selected", (x) => x.id === d.id);
